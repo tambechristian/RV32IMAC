@@ -1,0 +1,11 @@
+# Icarus Verilog outputs
+*.vvp
+
+# Vivado and XSim generated files
+.Xil/
+xsim.dir/
+*.jou
+*.log
+*.pb
+*.wdb
+webtalk*.xml
