@@ -1,0 +1,81 @@
+/dts-v1/;
+
+/ {
+    #address-cells = <1>;
+    #size-cells = <1>;
+    compatible = "tambe,zulu-a7-rv32imac";
+    model = "Zulu A7 RV32IMAC";
+
+    aliases {
+        serial0 = &uart0;
+    };
+
+    chosen {
+        stdout-path = "serial0:115200n8";
+        bootargs = "console=ttyS0,115200 earlycon=uart8250,mmio32,0x10000000,115200";
+    };
+
+    cpus {
+        #address-cells = <1>;
+        #size-cells = <0>;
+        timebase-frequency = <1000000>;
+
+        cpu0: cpu@0 {
+            device_type = "cpu";
+            reg = <0>;
+            status = "okay";
+            compatible = "riscv";
+            riscv,isa = "rv32imac_zicsr_zifencei";
+            riscv,isa-base = "rv32i";
+            riscv,isa-extensions = "i", "m", "a", "c", "zicsr", "zifencei";
+            mmu-type = "riscv,sv32";
+            clock-frequency = <100000000>;
+
+            cpu0_intc: interrupt-controller {
+                #interrupt-cells = <1>;
+                compatible = "riscv,cpu-intc";
+                interrupt-controller;
+            };
+        };
+    };
+
+    memory@80000000 {
+        device_type = "memory";
+        reg = <0x80000000 0x04000000>;
+    };
+
+    soc {
+        #address-cells = <1>;
+        #size-cells = <1>;
+        compatible = "simple-bus";
+        ranges;
+
+        clint0: timer@2000000 {
+            compatible = "riscv,clint0";
+            reg = <0x02000000 0x00010000>;
+            interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>;
+        };
+
+        plic0: interrupt-controller@c000000 {
+            compatible = "sifive,plic-1.0.0";
+            reg = <0x0c000000 0x00400000>;
+            #address-cells = <0>;
+            #interrupt-cells = <1>;
+            interrupt-controller;
+            riscv,ndev = <32>;
+            interrupts-extended = <&cpu0_intc 11>, <&cpu0_intc 9>;
+        };
+
+        uart0: serial@10000000 {
+            compatible = "ns16550a";
+            reg = <0x10000000 0x00001000>;
+            clock-frequency = <100000000>;
+            current-speed = <115200>;
+            reg-shift = <2>;
+            reg-io-width = <4>;
+            interrupt-parent = <&plic0>;
+            interrupts = <1>;
+            status = "okay";
+        };
+    };
+};

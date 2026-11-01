@@ -52,4 +52,9 @@ Invoke-IcarusTest "rv32imac_privilege_tb" (
     $commonSources + (Join-Path $PSScriptRoot "rv32imac_privilege_tb.sv")
 )
 
+Invoke-IcarusTest "zulu_sdram_controller_tb" @(
+    (Join-Path $PSScriptRoot "zulu_a7\rtl\zulu_sdram_controller.sv"),
+    (Join-Path $PSScriptRoot "zulu_a7\rtl\zulu_sdram_controller_tb.sv")
+)
+
 Write-Host "All RV32IMAC tests passed."

@@ -1,6 +1,9 @@
 `timescale 1ns / 1ps
 
-module rv32imac_wb (
+module rv32imac_wb #(
+    parameter logic [31:0] RESET_VECTOR = 32'h00000000,
+    parameter logic [31:0] HART_ID = 32'd0
+) (
     input  logic        clk,
     input  logic        reset,
     output logic        wb_cyc,
@@ -34,7 +37,10 @@ module rv32imac_wb (
     assign wb_cyc = memory_valid;
     assign wb_stb = memory_valid;
 
-    rv32imac_core core (
+    rv32imac_core #(
+        .RESET_VECTOR(RESET_VECTOR),
+        .HART_ID(HART_ID)
+    ) core (
         .clk(clk),
         .reset(reset),
         .memory_valid(memory_valid),

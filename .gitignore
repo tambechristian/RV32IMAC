@@ -9,3 +9,6 @@ xsim.dir/
 *.pb
 *.wdb
 webtalk*.xml
+
+# Generated Zulu OpenSBI firmware
+zulu_a7/opensbi/build/

@@ -63,4 +63,9 @@ package rv32imac_pkg;
     localparam logic [11:0] CSR_CYCLE      = 12'hc00;
     localparam logic [11:0] CSR_TIME       = 12'hc01;
     localparam logic [11:0] CSR_INSTRET    = 12'hc02;
+    localparam logic [11:0] CSR_MVENDORID  = 12'hf11;
+    localparam logic [11:0] CSR_MARCHID    = 12'hf12;
+    localparam logic [11:0] CSR_MIMPID     = 12'hf13;
+    localparam logic [11:0] CSR_MHARTID    = 12'hf14;
+    localparam logic [11:0] CSR_MCONFIGPTR = 12'hf15;
 endpackage

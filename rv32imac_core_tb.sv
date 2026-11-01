@@ -27,7 +27,9 @@ module rv32imac_core_tb;
         end
     end
 
-    rv32imac_core dut (
+    rv32imac_core #(
+        .HART_ID(32'd7)
+    ) dut (
         .clk(clk), .reset(reset),
         .memory_valid(memory_valid), .memory_write(memory_write),
         .memory_address(memory_address), .memory_write_data(memory_write_data),
@@ -73,7 +75,8 @@ module rv32imac_core_tb;
         memory[6] = 32'h10000313; // addi x6,x0,0x100
         memory[7] = 32'h001322af; // amoadd.w x5,x1,(x6)
         memory[8] = 32'h00032383; // lw x7,0(x6)
-        memory[9] = 32'h0000006f; // loop
+        memory[9] = 32'hf14025f3; // csrr x11,mhartid
+        memory[10] = 32'h0000006f; // loop
 
         repeat (3) @(negedge clk);
         reset = 1'b0;
@@ -86,12 +89,13 @@ module rv32imac_core_tb;
         check_register(5'd4, 32'd36);
         check_register(5'd5, 32'd35);
         check_register(5'd7, 32'd40);
+        check_register(5'd11, 32'd7);
         if (memory[64] !== 32'd40) begin
             $error("memory[0x100] expected=00000028 actual=%08x", memory[64]);
             failures = failures + 1;
         end
-        if (debug_program_counter !== 32'h00000024) begin
-            $error("expected loop PC 00000024 actual=%08x", debug_program_counter);
+        if (debug_program_counter !== 32'h00000028) begin
+            $error("expected loop PC 00000028 actual=%08x", debug_program_counter);
             failures = failures + 1;
         end
 
