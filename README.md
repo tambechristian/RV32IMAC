@@ -58,6 +58,19 @@ The regressions cover:
 - integrated RV32IMAC execution with compressed instructions, memory, and AMO
 - M-mode to S-mode entry, delegated S-mode `ecall`, trap CSRs, and `sret`
 
+## Current validation status
+
+- All five directed RTL regressions pass.
+- All 101 applicable tests from `riscv-arch-test` release 3.9.1 pass:
+  39 I, 8 M, 9 A, 29 C, 1 Zifencei, and 15 privilege tests.
+- A 200-seed random differential campaign passed 200/200 programs, comparing
+  the RTL against an independent architectural model across 91,058 executed
+  operations and all implemented base I/M/A/C instruction families.
+
+The architecture-test result is a legacy release 3.9.1 execution, not current
+ACT4 certification. The random campaign covers M-mode integer execution;
+directed tests provide the S-mode, interrupt, and Sv32 coverage.
+
 To synthesize the standalone Wishbone core for the Cmod A7-35T:
 
 ```powershell

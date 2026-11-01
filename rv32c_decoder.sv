@@ -84,7 +84,6 @@ module rv32c_decoder (
                 3'b010: begin // C.LI
                     imm = {{26{compressed[12]}}, compressed[12], compressed[6:2]};
                     instruction = enc_i(imm[11:0], 5'd0, 3'b000, rd, 7'b0010011);
-                    illegal = rd == 0;
                 end
                 3'b011: begin
                     if (rd == 5'd2) begin // C.ADDI16SP
@@ -95,7 +94,7 @@ module rv32c_decoder (
                     end else begin // C.LUI
                         imm = {{14{compressed[12]}}, compressed[12], compressed[6:2], 12'd0};
                         instruction = {imm[31:12], rd, 7'b0110111};
-                        illegal = rd == 0 || rd == 2 || imm == 0;
+                        illegal = rd == 2 || imm == 0;
                     end
                 end
                 3'b100: begin
@@ -142,7 +141,7 @@ module rv32c_decoder (
                 3'b000: begin // C.SLLI
                     instruction = enc_i({7'b0000000, compressed[6:2]}, rs1,
                                         3'b001, rd, 7'b0010011);
-                    illegal = compressed[12] || rd == 0;
+                    illegal = compressed[12];
                 end
                 3'b010: begin // C.LWSP
                     imm = {24'd0, compressed[3:2], compressed[12],
@@ -157,7 +156,6 @@ module rv32c_decoder (
                             illegal = rs1 == 0;
                         end else begin // C.MV
                             instruction = enc_r(7'd0, rs2, 5'd0, 3'b000, rd, 7'b0110011);
-                            illegal = rd == 0;
                         end
                     end else if (rd == 0 && rs2 == 0) begin
                         instruction = 32'h00100073; // C.EBREAK
@@ -166,7 +164,6 @@ module rv32c_decoder (
                         illegal = rs1 == 0;
                     end else begin // C.ADD
                         instruction = enc_r(7'd0, rs2, rs1, 3'b000, rd, 7'b0110011);
-                        illegal = rd == 0;
                     end
                 end
                 3'b110: begin // C.SWSP

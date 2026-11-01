@@ -37,6 +37,11 @@ module rv32c_decoder_tb;
         check(16'h9002, 32'h00100073, 1'b0); // C.EBREAK
         check(16'h4502, 32'h00012503, 1'b0); // C.LWSP a0,0(sp)
         check(16'hc02a, 32'h00a12023, 1'b0); // C.SWSP a0,0(sp)
+        check(16'h4001, 32'h00000013, 1'b0); // C.LI hint
+        check(16'h6005, 32'h00001037, 1'b0); // C.LUI hint
+        check(16'h8076, 32'h01d00033, 1'b0); // C.MV hint
+        check(16'h900a, 32'h00200033, 1'b0); // C.ADD hint
+        check(16'h0006, 32'h00101013, 1'b0); // C.SLLI hint
         check(16'h0000, 32'h00010413, 1'b1); // reserved C.ADDI4SPN
         if (failures == 0) $display("PASS: rv32c_decoder");
         else $fatal(1, "FAIL: rv32c_decoder (%0d failures)", failures);
